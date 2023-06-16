@@ -1,0 +1,39 @@
+import random
+
+def roll_dice():
+    return random.randint(1,6)
+
+def play():
+    go = input("press Enter to Roll")
+    while go != "":
+        go = input("press Enter to Roll")
+    point = roll_dice() + roll_dice()
+    print("Point is {}".format(point))
+    turn = 0
+    win = "YOU WON!"
+    lose = "YOU LOST!"
+    if point == 7 or point == 11:
+        return win
+    elif point == 2:
+        return lose
+    else:
+        while True:
+            go = input("press Enter to Roll")
+            while go != "":
+                go = input("press Enter to Roll")
+            turn = roll_dice() + roll_dice()
+            print("Roll! {}".format(turn))
+            if turn == point:
+                return win
+            if turn == 2 or turn == 7 or turn == 11:
+                return lose
+
+while True:
+    print(play())
+    again = input("Would you like to play again?(Y/N)")
+    while again.lower() != "y" and again.lower() != "n":
+        again = input("Incorrect Response! Would you like to play again?(Y/N)")
+    if again.lower() == "n":
+        print("Thank you for playing!")
+        break
+ 
