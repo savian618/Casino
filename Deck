@@ -33,10 +33,22 @@ class Hand:
     
     def total(self):
         value = 0
-        for c in self.hand:
-            value+= self.dct[c]
-        return value
-        
+        value1 = 0
+        if not "A" in self.hand:
+            for c in self.hand:
+                value+= self.dct[c]
+            return [value]
+        else:
+            for c in self.hand:
+                if c == "A":
+                    value+= self.dct[c][0]
+                    value1+= self.dct[c][1]
+            else:
+                value+= self.dct[c]
+                value1+=self.dct[c]
+            if value1 > 21:
+                return [value]
+            return [value, value1]
         
 
 dDict = { 
