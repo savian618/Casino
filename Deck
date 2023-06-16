@@ -43,9 +43,9 @@ class Hand:
                 if c == "A":
                     value+= self.dct[c][0]
                     value1+= self.dct[c][1]
-            else:
-                value+= self.dct[c]
-                value1+=self.dct[c]
+                else:
+                    value+= self.dct[c]
+                    value1+=self.dct[c]
             if value1 > 21:
                 return [value]
             return [value, value1]
@@ -66,12 +66,31 @@ dDict = {
     "Q" : 10,
     "K" : 10
 }
-
-d = Deck()
-d.set_deck(dDict)
-ph = Hand(dDict)
-ph.add_card(d.deal())
-ph.add_card(d.deal())
-print(d.get_deck())
-print(ph.get_hand())
-print(ph.total())
+def play():
+    #Create Deck
+    d = Deck()
+    d.set_deck(dDict)
+    #Create Dealer and Player Hands
+    ph = Hand(dDict)
+    dh = Hand(dDict)
+    #Deal Hand
+    ph.add_card(d.deal())
+    print(ph.get_hand())
+    dh.add_card(d.deal())
+    ph.add_card(d.deal())
+    print(ph.get_hand())
+    dh.add_card(d.deal())
+    print("Dealer: {}".format(dh.get_hand()))
+    print(ph.get_hand())
+    print(ph.total())
+    if len(ph.total()) == 1:
+        count = ph.total()[0]
+        while count < 21:
+            hit = input("Do you want to hit(Y/N)?")
+            if hit.lower() == "y":
+                ph.add_card(d.deal())
+                print(ph.get_hand())
+            elif hit.lower() == "n":
+                while dh.total()[0] < 17:
+                    dh.add_card(d.deal())
+                    print("Dealer: {}".format(dh.get_hand()))
