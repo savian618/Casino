@@ -1,14 +1,46 @@
 import random
-
-def deal(deck):
-   i = random.randint(0, len(deck) - 1) 
-   return deck[i] , deck.pop(i)
+class Deck:
+    
+    def __init__ (self):
+        self.deck = []
+    
+    def deal(self):
+        i = random.randint(0, len(self.deck) - 1)
+        card = self.deck[i]
+        self.deck.pop(i)
+        return card
    
-def shuffle(deck):
-    return random.shuffle(deck)
+    def set_deck(self, d):
+        for x in d.keys():
+            for i in range(4):
+                self.deck.append(x)
+        random.shuffle(self.deck)
+                
+    def get_deck(self):
+        return self.deck
+        
+        
+class Hand:
+    def __init__(self, dct):
+        self.hand = []
+        self.dct = dct
+    
+    def add_card(self, c):
+        self.hand.append(c)
+        
+    def get_hand(self):
+        return self.hand
+    
+    def total(self):
+        value = 0
+        for c in self.hand:
+            value+= self.dct[c]
+        return value
+        
+        
 
 dDict = { 
-    "A" : 1,
+    "A" : [1, 11],
     "2" : 2,
     "3" : 3,
     "4" : 4,
@@ -23,7 +55,11 @@ dDict = {
     "K" : 10
 }
 
-deck = []
-for x in dDict.keys():
-    for i in range(4):
-        
+d = Deck()
+d.set_deck(dDict)
+ph = Hand(dDict)
+ph.add_card(d.deal())
+ph.add_card(d.deal())
+print(d.get_deck())
+print(ph.get_hand())
+print(ph.total())
