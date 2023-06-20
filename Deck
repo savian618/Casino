@@ -48,6 +48,23 @@ class Hand:
                     value1+=self.dct[c]
             return [value, value1]
             
+class Player:
+    def __init__(self, name):
+        self.name = name
+        self.wallet = 100
+        
+    def lost(self, a):
+        self.wallet-= a
+    
+    def win(self, a):
+        self.wallet+= a
+        
+    def get_wallet(self):
+        return self.wallet
+        
+    def get_name(self):
+        return self.name
+            
 def find_closest(lst, k):
     lst.sort()
     closest_num = lst[0]
@@ -58,12 +75,12 @@ def find_closest(lst, k):
             closest_num = num
     return closest_num
     
-def another(n):
+def another():
     again = input("Do you want to play another hand(Y/N)?")
     while again.lower() != "n" and again.lower() != "y":
         again = input("Do you want to play another hand(Y/N)?")
     if again.lower() == "y":
-        return play(n)
+        return play()
     elif again.lower() == "n":
         return "Thank you for playing!"
     
@@ -84,7 +101,12 @@ dDict = {
     "Q" : 10,
     "K" : 10
 }
-def play(name):
+def play():
+    name = p.get_name()
+    print("Money: {}".format(p.get_wallet()))
+    bet = int(input("How much would you like to bet? "))
+    while bet > p.get_wallet():
+        bet = int(input("You do not have enough money. \nHow much would you like to bet? "))
     #Create Deck
     d = Deck()
     d.set_deck(dDict)
@@ -93,10 +115,9 @@ def play(name):
     dh = Hand(dDict)
     #Deal Hand
     ph.add_card(d.deal())
-    print(ph.get_hand())
+    print("{}: {}".format(name ,ph.get_hand()))
     dh.add_card(d.deal())
     ph.add_card(d.deal())
-    print(ph.get_hand())
     dh.add_card(d.deal())
     print("Dealer: {}".format(dh.get_hand()[1]))
     print("{}: {}".format(name ,ph.get_hand()))
@@ -108,8 +129,6 @@ def play(name):
             ph.add_card(d.deal())
             print("{}: {}".format(name ,ph.get_hand()))
             pFinal = find_closest(ph.total(), 21)
-            print(ph.total())
-            print(pFinal)
                 
         elif hit.lower() == "n":
             print("Dealer: {}".format(dh.get_hand()))
@@ -121,30 +140,41 @@ def play(name):
     if pFinal > 21:
         print("BUST! You Lose!")
         print("Dealer: {}".format(dh.get_hand()))
-        another(name)
+        p.lost(bet)
+        print("Money: {}".format(p.get_wallet()))
+        another()
             
     elif dFinal > 21:
         print("DEALER BUST! You Win!")
-        another(name)
+        p.win(bet)
+        print("Money: {}".format(p.get_wallet()))
+        another()
             
     elif dFinal == pFinal:
         print("Tie")
-        another(name)
+        print("Money: {}".format(p.get_wallet()))
+        another()
         
     elif pFinal == 21: 
         print("You Win!")
-        another(name)
+        p.win(bet)
+        print("Money: {}".format(p.get_wallet()))
+        another()
             
     elif pFinal > dFinal: 
         print("You Win!")
-        another(name)
+        p.win(bet)
+        print("Money: {}".format(p.get_wallet()))
+        another()
             
     elif pFinal < dFinal:
         print("You Lose!")
-        another(name)
+        p.lost(bet)
+        print("Money: {}".format(p.get_wallet()))
+        another()
             
     else:
         print("Error")
             
-name = input("What is your name?")
-play(name)
+p =  Player(input("What is your name?"))
+play()
