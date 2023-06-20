@@ -46,13 +46,21 @@ class Hand:
                 else:
                     value+= self.dct[c]
                     value1+=self.dct[c]
-            if value1 > 21:
-                return [value]
             return [value, value1]
+            
+def find_closest(lst, k):
+    lst.sort()
+    closest_num = lst[0]
+    for num in lst:
+        if num > k:
+            break
+        if num - k < closest_num - k:
+            closest_num = num
+    return closest_num
         
 
 dDict = { 
-    "A" : [1, 11],
+    "A" : [11, 1],
     "2" : 2,
     "3" : 3,
     "4" : 4,
@@ -66,7 +74,7 @@ dDict = {
     "Q" : 10,
     "K" : 10
 }
-def play():
+def play(name):
     #Create Deck
     d = Deck()
     d.set_deck(dDict)
@@ -80,17 +88,88 @@ def play():
     ph.add_card(d.deal())
     print(ph.get_hand())
     dh.add_card(d.deal())
-    print("Dealer: {}".format(dh.get_hand()))
-    print(ph.get_hand())
-    print(ph.total())
-    if len(ph.total()) == 1:
-        count = ph.total()[0]
-        while count < 21:
-            hit = input("Do you want to hit(Y/N)?")
-            if hit.lower() == "y":
-                ph.add_card(d.deal())
-                print(ph.get_hand())
-            elif hit.lower() == "n":
-                while dh.total()[0] < 17:
-                    dh.add_card(d.deal())
-                    print("Dealer: {}".format(dh.get_hand()))
+    print("Dealer: {}".format(dh.get_hand()[1]))
+    print("{}: {}".format(name ,ph.get_hand()))
+    pFinal = ph.total()[0]
+    dFinal = dh.total()[0]
+    while pFinal < 21:
+        hit = input("Do you want to hit(Y/N)?")
+        if hit.lower() == "y":
+            ph.add_card(d.deal())
+            print("{}: {}".format(name ,ph.get_hand()))
+            pFinal = find_closest(ph.total(), 21)
+            print(pFinal)
+                
+        elif hit.lower() == "n":
+            print("Dealer: {}".format(dh.get_hand()))
+            while dFinal < 17:
+                dh.add_card(d.deal())
+                print("Dealer: {}".format(dh.get_hand()))
+                dFinal = find_closest(dh.total(), 21)
+            break
+    if pFinal > 21:
+        print("BUST! You Lose!")
+        print("Dealer: {}".format(dh.get_hand()))
+        again = input("Do you want to play another hand(Y/N)?")
+        while again.lower() != "n" and again.lower() != "y":
+            again = input("Do you want to play another hand(Y/N)?")
+        if again.lower() == "y":
+            play(name)
+        elif again.lower() == "n":
+            print("Thank you for playing!")
+            
+    elif dFinal > 21:
+        print("DEALER BUST! You Win!")
+        again = input("Do you want to play another hand(Y/N)?")
+        while again.lower() != "n" and again.lower() != "y":
+            again = input("Do you want to play another hand(Y/N)?")
+        if again.lower() == "y":
+            play(name)
+        elif again.lower() == "n":
+            print("Thank you for playing!")
+            
+    elif dFinal == pFinal:
+        print("Tie")
+        again = input("Do you want to play another hand(Y/N)?")
+        while again.lower() != "n" and again.lower() != "y":
+            again = input("Do you want to play another hand(Y/N)?")
+        if again.lower() == "y":
+            play(name)
+        elif again.lower() == "n":
+            print("Thank you for playing!")
+        
+    elif pFinal == 21: 
+        print("You Win!")
+        again = input("Do you want to play another hand(Y/N)?")
+        while again.lower() != "n" and again.lower() != "y":
+            again = input("Do you want to play another hand(Y/N)?")
+        if again.lower() == "y":
+            play(name)
+        elif again.lower() == "n":
+            print("Thank you for playing!")
+            
+    elif pFinal > dFinal: 
+        print("You Win!")
+        again = input("Do you want to play another hand(Y/N)?")
+        while again.lower() != "n" and again.lower() != "y":
+            again = input("Do you want to play another hand(Y/N)?")
+        if again.lower() == "y":
+            play(name)
+        elif again.lower() == "n":
+            print("Thank you for playing!")
+            
+    elif pFinal < dFinal:
+        print("You Lose!")
+        again = input("Do you want to play another hand(Y/N)?")
+        while again.lower() != "n" and again.lower() != "y":
+            again = input("Do you want to play another hand(Y/N)?")
+        if again.lower() == "y":
+            play(name)
+        elif again.lower() == "n":
+            print("Thank you for playing!")    
+            
+    else:
+        print("Error")
+            
+name = input("What is your name?")
+play(name)
