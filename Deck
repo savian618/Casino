@@ -59,6 +59,9 @@ class Player:
     def win(self, a):
         self.wallet+= a
         
+    def add(self, a):
+        self.wallet+= a
+        
     def get_wallet(self):
         return self.wallet
         
@@ -82,7 +85,17 @@ def another():
     if again.lower() == "y":
         return play()
     elif again.lower() == "n":
-        return "Thank you for playing!"
+        print("Thank you for playing!")
+        
+def deposit():
+    prompt = input("Would you like to add money(Y/N)?")
+    while prompt.lower() != "y" and prompt.lower() != "n":
+        prompt = input("Would you like to add money(Y/N)?")
+    if prompt.lower() == "y":
+        amount = int(input("How much?"))
+        p.add(amount)
+        print(p.get_wallet())
+    
     
         
 
@@ -102,14 +115,17 @@ dDict = {
     "K" : 10
 }
 def play():
+    #Shuffle deck
+    if random.randint(1,7) == 3:
+        print("DEALER SHUFFLED DECK")
+        d.set_deck(dDict)
     name = p.get_name()
     print("Money: {}".format(p.get_wallet()))
     bet = int(input("How much would you like to bet? "))
     while bet > p.get_wallet():
-        bet = int(input("You do not have enough money. \nHow much would you like to bet? "))
-    #Create Deck
-    d = Deck()
-    d.set_deck(dDict)
+        print("You dont have enough money.")
+        deposit()
+        bet = int(input("How much would you like to bet? "))
     #Create Dealer and Player Hands
     ph = Hand(dDict)
     dh = Hand(dDict)
@@ -124,7 +140,9 @@ def play():
     pFinal = ph.total()[0]
     dFinal = dh.total()[0]
     while pFinal < 21:
-        hit = input("Do you want to hit(Y/N)?")
+        if dh.total == 21:
+            break
+        hit = input("Do you want to hit(Y/N)? ")
         if hit.lower() == "y":
             ph.add_card(d.deal())
             print("{}: {}".format(name ,ph.get_hand()))
@@ -175,6 +193,9 @@ def play():
             
     else:
         print("Error")
-            
-p =  Player(input("What is your name?"))
+
+
+d = Deck()
+d.set_deck(dDict)
+p =  Player(input("What is your name? "))
 play()
