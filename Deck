@@ -54,9 +54,19 @@ def find_closest(lst, k):
     for num in lst:
         if num > k:
             break
-        if num - k < closest_num - k:
+        if abs(num - k) < abs(closest_num - k):
             closest_num = num
     return closest_num
+    
+def another(n):
+    again = input("Do you want to play another hand(Y/N)?")
+    while again.lower() != "n" and again.lower() != "y":
+        again = input("Do you want to play another hand(Y/N)?")
+    if again.lower() == "y":
+        return play(n)
+    elif again.lower() == "n":
+        return "Thank you for playing!"
+    
         
 
 dDict = { 
@@ -98,6 +108,7 @@ def play(name):
             ph.add_card(d.deal())
             print("{}: {}".format(name ,ph.get_hand()))
             pFinal = find_closest(ph.total(), 21)
+            print(ph.total())
             print(pFinal)
                 
         elif hit.lower() == "n":
@@ -110,63 +121,27 @@ def play(name):
     if pFinal > 21:
         print("BUST! You Lose!")
         print("Dealer: {}".format(dh.get_hand()))
-        again = input("Do you want to play another hand(Y/N)?")
-        while again.lower() != "n" and again.lower() != "y":
-            again = input("Do you want to play another hand(Y/N)?")
-        if again.lower() == "y":
-            play(name)
-        elif again.lower() == "n":
-            print("Thank you for playing!")
+        another(name)
             
     elif dFinal > 21:
         print("DEALER BUST! You Win!")
-        again = input("Do you want to play another hand(Y/N)?")
-        while again.lower() != "n" and again.lower() != "y":
-            again = input("Do you want to play another hand(Y/N)?")
-        if again.lower() == "y":
-            play(name)
-        elif again.lower() == "n":
-            print("Thank you for playing!")
+        another(name)
             
     elif dFinal == pFinal:
         print("Tie")
-        again = input("Do you want to play another hand(Y/N)?")
-        while again.lower() != "n" and again.lower() != "y":
-            again = input("Do you want to play another hand(Y/N)?")
-        if again.lower() == "y":
-            play(name)
-        elif again.lower() == "n":
-            print("Thank you for playing!")
+        another(name)
         
     elif pFinal == 21: 
         print("You Win!")
-        again = input("Do you want to play another hand(Y/N)?")
-        while again.lower() != "n" and again.lower() != "y":
-            again = input("Do you want to play another hand(Y/N)?")
-        if again.lower() == "y":
-            play(name)
-        elif again.lower() == "n":
-            print("Thank you for playing!")
+        another(name)
             
     elif pFinal > dFinal: 
         print("You Win!")
-        again = input("Do you want to play another hand(Y/N)?")
-        while again.lower() != "n" and again.lower() != "y":
-            again = input("Do you want to play another hand(Y/N)?")
-        if again.lower() == "y":
-            play(name)
-        elif again.lower() == "n":
-            print("Thank you for playing!")
+        another(name)
             
     elif pFinal < dFinal:
         print("You Lose!")
-        again = input("Do you want to play another hand(Y/N)?")
-        while again.lower() != "n" and again.lower() != "y":
-            again = input("Do you want to play another hand(Y/N)?")
-        if again.lower() == "y":
-            play(name)
-        elif again.lower() == "n":
-            print("Thank you for playing!")    
+        another(name)
             
     else:
         print("Error")
